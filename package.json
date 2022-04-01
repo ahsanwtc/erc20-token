@@ -1,0 +1,20 @@
+{
+  "name": "erc20",
+  "version": "1.0.0",
+  "description": "An implementation of ERC20 Token Standard",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ahsanwtc/erc20-token.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ahsanwtc/erc20-token/issues"
+  },
+  "homepage": "https://github.com/ahsanwtc/erc20-token#readme"
+}
