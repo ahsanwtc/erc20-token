@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/ahsanwtc/erc20-token/issues"
   },
-  "homepage": "https://github.com/ahsanwtc/erc20-token#readme"
+  "homepage": "https://github.com/ahsanwtc/erc20-token#readme",
+  "dependencies": {
+    "@openzeppelin/test-helpers": "^0.5.15"
+  }
 }
