@@ -32,7 +32,7 @@ contract('ERC20', accounts => {
     const diff = balanceAfter.sub(balanceBefore).toNumber();
     assert(diff === tokenToTransfer);
     assert((await token.balanceOf(owner)).toNumber() === totalSupply - tokenToTransfer);
-    expectEvent(receipt, 'Transfer', { from: owner, to: user, value: web3.utils.toBN(tokenToTransfer) });
+    await expectEvent(receipt, 'Transfer', { from: owner, to: user, value: web3.utils.toBN(tokenToTransfer) });
   });
 
   it('should NOT transfer tokens if balance is not enough', async () => {
@@ -40,6 +40,21 @@ contract('ERC20', accounts => {
     await expectRevert(
       token.transfer(user, tokenToTransfer, { from: owner }),
       'not enough balance'
+    );
+  });
+
+  it('should approve a transfer', async () => {
+    const tokenToApprove = 100;
+    const receipt = await token.approve(spender, tokenToApprove, { from: owner });
+    await expectEvent(receipt, 'Approval', { owner, spender, value: web3.utils.toBN(tokenToApprove) });
+    assert((await token.allowance(owner, spender)).toNumber() === tokenToApprove);
+  });
+
+  it('should NOT approve a transfer if owner is the spender', async () => {
+    const tokenToApprove = 100;
+    await expectRevert(
+      token.approve(owner, tokenToApprove, { from: owner }),
+      'sender can\'t be spender'
     );
   });
 
