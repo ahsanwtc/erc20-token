@@ -58,4 +58,34 @@ contract('ERC20', accounts => {
     );
   });
 
+  it('should transfer from spender to user', async () => {
+    const tokenToApprove = 100;
+    await token.approve(spender, tokenToApprove, { from: owner });
+    const receipt = await token.transferFrom(owner, user, tokenToApprove, { from: spender });
+    await expectEvent(receipt, 'Transfer', { from: owner, to: user, value: web3.utils.toBN(tokenToApprove) });
+    assert((await token.allowance(owner, spender)).toNumber() === 0);
+    assert((await token.balanceOf(owner)).toNumber() === totalSupply - tokenToApprove);
+    assert((await token.balanceOf(user)).toNumber() === tokenToApprove);
+  });
+
+  it('should NOT transfer from spender to user if allowance is not enough', async () => {
+    const tokenToApprove = 10;
+    const tokenToTransfer = 50;
+    await token.approve(spender, tokenToApprove, { from: owner });
+    await expectRevert(
+      token.transferFrom(owner, user, tokenToTransfer, { from: spender }),
+      'not enough allowance'
+    );    
+  });
+
+  it('should NOT transfer from spender to user if owner does not have enough balance', async () => {
+    const tokenToApprove = totalSupply + 1;
+    const tokenToTransfer = totalSupply + 1;
+    await token.approve(spender, tokenToApprove, { from: owner });
+    await expectRevert(
+      token.transferFrom(owner, user, tokenToTransfer, { from: spender }),
+      'not enough balance'
+    );    
+  });
+
 });
